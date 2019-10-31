@@ -21,6 +21,7 @@ type Book struct {
 
 // Author Struc
 type Author struct {
+	ID 	  string `json:"id"`
 	Firstname string `json:"firstname"`
 	Lastname  string `json:"lastname"`
 }
@@ -49,6 +50,23 @@ func getBook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(&Book{})
+}
+
+// Get author
+func getAuthor(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r) // Get params
+	fmt.Println(params)
+	// Loop through authors and find with ID
+	// - @todo replace with DB query
+	for _, item := range authors {
+		if item.ID == params["id"] {
+			json.NewEncoder(w).Encode(item)
+			return
+		}
+	}
+
+	json.NewEncoder(w).Encode(&Author{})
 }
 
 // Create a New Book
